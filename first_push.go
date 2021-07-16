@@ -1,6 +1,3 @@
-#first push
-#test Pull Request
-
 package main
 
 import "fmt"

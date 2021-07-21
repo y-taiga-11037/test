@@ -20,10 +20,10 @@
 #### リクエストサンプル
 ```
 {
-  "shopping_day": "2020-07-20",
+  "shopping_day": "20200720",
   "product_name": "にんじん",
   "quantity": "1袋",
-  "price": "190円",
+  "price": "190円"
 }
 ```
 
@@ -35,18 +35,18 @@
 ```
 {
   "shopping_id": 1,
-  "shopping_day": "2020-07-20",
+  "shopping_day": "20200720",
   "product_name": "にんじん",
   "quantity": "1袋",
-  "price": "190円",
+  "price": "190円"
 }
 ```
 
 #### 失敗時
 
  - ステータスコード: 400 Bad Request
-
-
+ - ステータスコード: 409 Conflict
+ - ステータスコード: 500 Internal Server Error
 
 
 
@@ -79,32 +79,28 @@
 ```
 {
   "shopping_id": 1,
-  "shopping_day": "2020-07-20",
+  "shopping_day": "20200720",
   "product_name": "にんじん",
   "quantity": "1袋",
-  "price": "190円",
+  "price": "190円"
 }
 {
   "shopping_id": 2,
-  "shopping_day": "2020-07-21",
+  "shopping_day": "20200721",
   "product_name": "たまねぎ",
   "quantity": "1袋",
-  "price": "210円",
+  "price": "210円"
 }
 {
   "shopping_id": 3,
-  "shopping_day": "2020-07-22",
+  "shopping_day": "20200722",
   "product_name": "じゃがいも",
   "quantity": "null",
-  "price": "null",
+  "price": "null"
 }
 
 
 ```
-
-#### 失敗時
-
- - ステータスコード: 400 Bad Request
 
 
 
@@ -131,7 +127,7 @@
 
 ```
 {
-  "shopping_day": "2020-07-24",
+  "shopping_day": "20200724"
 }
 ```
 
@@ -144,7 +140,7 @@
 ```
 {
   "shopping_id": 1,
-  "shopping_day": "2020-07-24",
+  "shopping_day": "20200724"
 }
 ```
 
@@ -152,12 +148,58 @@
 
  - ステータスコード: 400 Bad Request
  - ステータスコード: 404 Not Found
+ - ステータスコード: 500 Internal Server Error
 
 
 
 
+## リスト内容変更API
 
+### 概要
 
+指定した買い物リストの商品、個数、価格を変更する
+
+### パス
+
+/api/shopping/{shopping_id}/products/{shopping_product_id}
+
+### メソッド
+
+ - PATCH
+      - JSON (Req/Res)
+ 
+ 
+#### リクエストサンプル
+
+```
+{
+  "product_name": "豚肉",
+  "quantity": "100g",
+  "price": "240円"
+}
+
+```
+
+### レスポンス
+#### 成功時
+ - ステータスコード: 200 OK
+ 
+#### レスポンスサンプル
+
+```
+{
+  "shopping_id": 1,
+  "product_name": "豚肉",
+  "quantity": "100g",
+  "price": "240円"
+}
+```
+
+#### 失敗時
+
+ - ステータスコード: 400 Bad Request
+ - ステータスコード: 404 Not Found
+ - ステータスコード: 500 Internal Server Error
 
 
 
@@ -198,4 +240,4 @@
 
  - ステータスコード: 400 Bad Request
  - ステータスコード: 404 Not Found
- 
+ - ステータスコード: 500 Internal Server Error

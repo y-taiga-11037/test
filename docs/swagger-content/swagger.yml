@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
-  version: "1.0.0"
-  title: "shopping API"
+  version: 1.0.0
+  title: shopping API
   
 tags:
   - name: shopping

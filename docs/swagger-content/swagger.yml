@@ -21,18 +21,18 @@ paths:
             schema:
               properties:
                 shopping_day:
-                  type: string
+                  type: number
                 product_name:
                   type: string
                 quantity:
-                  type: string
+                  type: integer
                 price:
-                  type: string
+                  type: integer
               example:
-                shopping_day: "20200720"
+                shopping_day: 20200720
                 product_name: "にんじん"
-                quantity: "1袋"
-                price: "190円"
+                quantity: 1
+                price: 190
                 
                 
                 
@@ -45,24 +45,24 @@ paths:
             application/json:
               schema:
                 properties:
-                  shopping_day:
-                   type: string
-                  product_name:
-                   type: string
-                  quantity:
-                   type: string
-                  price:
-                   type: string
-                  shopping_id:
-                   type: integer
+                 shopping_day:
+                  type: number
+                 product_name:
+                  type: string
+                 quantity:
+                  type: integer
+                 price:
+                  type: integer
+                 shopping_id:
+                  type: integer
 
               example:
-                
                 shopping_id: 1
-                shopping_day: "20200720"
-                product_name: "にんじん"
-                quantity: "1袋"
-                price: "190円"
+                shopping_day: 20200720
+                products:
+                  - product_name: "にんじん"
+                    quantity: 1
+                    price: 190
 
         "400":
           description: Bad Request
@@ -87,37 +87,36 @@ paths:
           content:
             application/json:
               schema:
-                 properties:
-                  shopping_day:
-                   type: string
-                  product_name:
-                   type: string
-                  quantity:
-                   type: string
-                  price:
-                   type: string
-                  shopping_id:
-                   type: integer
+                properties:
+                 shopping_day:
+                  type: number
+                 product_name:
+                  type: string
+                 quantity:
+                  type: integer
+                 price:
+                  type: integer
+                 shopping_id:
+                  type: integer
 
               example:     
-          
-              - shopping_id: 1
-                shopping_day: "20200720"
-                product_name: "にんじん"
-                quantity: "1袋"
-                price: "190円"
+                shopping_id: 2
+                shopping_day: 20200721
+                products:
+                  - product_name: "たまねぎ"
+                    quantity: 1
+                    price: 210
+                    
+                    
+              
 
-              - shopping_id: 2
-                shopping_day: "20200721"
-                product_name: "たまねぎ"
-                quantity: "1袋"
-                price: "210円"
 
-              - shopping_id: 3
-                shopping_day: "20200722"
-                product_name: "じゃがいも"
-                quantity": null
-                price: null
+              
+              
+              
+              
+                 
+              
           
           
   /api/shopping/{shopping_id}:
@@ -140,10 +139,9 @@ paths:
             schema:
               properties:
                 shopping_day:
-                  type: string
+                  type: number
               example:
-                shopping_day: "20200724"
-                    
+                shopping_day: 20200724     
            
            
       responses:
@@ -154,13 +152,13 @@ paths:
               schema:
                 properties:
                   shopping_day:
-                   type: string
+                   type: number
                   shopping_id:
                    type: integer
                    
               example:    
                 shopping_id: 1
-                shopping_day: "20200724" 
+                shopping_day: 20200724 
           
         "400":
           description: Bad Request
@@ -199,7 +197,43 @@ paths:
     
     
     
-    
+    get:
+      tags:
+        - shopping
+      description: |
+        指定した買い物リストを参照する
+      parameters:
+        - name: shopping_id
+          in: path
+          description: 買い物リストのID
+          required: true
+          schema:
+           type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                 shopping_day:
+                  type: number
+                 product_name:
+                  type: string
+                 quantity:
+                  type: integer
+                 price:
+                  type: integer
+                 shopping_id:
+                  type: integer
+
+              example:     
+                shopping_id: 3
+                shopping_day: 20200722
+                products:
+                  - product_name: "じゃがいも"
+                    quantity: 0
+                    price: 0
     
   
   
@@ -212,7 +246,7 @@ paths:
     patch:
       tags:
         - shopping
-      description: 指定した買い物リストの商品、個数、価格を変更する
+      description: 指定した買い物リストの商品、個数、価格を変更する。個数、価格を削除する。商品を購入したことを登録する。
       parameters:
         - name: shopping_id
           in: path
@@ -236,14 +270,17 @@ paths:
                 product_name:
                   type: string
                 quantity:
-                  type: string
+                  type: integer
                 price:
-                  type: string
+                  type: integer
+                purchese_flag:
+                  type: integer
                   
               example:
                  product_name: "豚肉"
-                 quantity: "100g"
-                 price: "240円"
+                 quantity: 100
+                 price: 0
+                 purchese_flag: 1
                     
         required: true   
            
@@ -257,17 +294,22 @@ paths:
                 product_name:
                    type: string
                 quantity:
-                   type: string
+                   type: integer
                 price:
-                   type: string
+                   type: integer
                 shopping_id:
                    type: integer
+                purchese_flag:
+                  type: integer
                    
               example:    
                 shopping_id: 1
-                product_name: "豚肉"
-                quantity: "100g"
-                price: "240円"
+                
+                products:
+                  - product_name: "豚肉"
+                    quantity: 100
+                    price: 0
+                    purchese_flag: 1
                 
           
           
@@ -279,87 +321,8 @@ paths:
           
         "500":
           description: Internal Server Error        
-          
-    post:
-      tags:
-        - shopping
-      description: 指定した買い物リストの商品を追加する
-      parameters:
-        - name: shopping_id
-          in: path
-          description: 買い物リストのID
-          required: true
-          schema:
-           type: integer
-        
-        - name: shopping_product_id
-          in: path
-          description: 買い物リストの商品のID
-          required: true
-          schema:
-           type: integer   
-           
-      requestBody:
-        content:
-          application/json:
-            schema:
-              properties:
-                product_name:
-                  type: string
-                
-                  
-              example:
-                 product_name: "たまねぎ"
-                 
-                    
-        required: true   
-           
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-               properties:
-                product_name:
-                   type: string
-                quantity:
-                   type: string
-                price:
-                   type: string
-                shopping_id:
-                   type: integer
-                shopping_day:
-                   type: string
-                
-                
-                   
-              example:
-              
-               - shopping_id: 1
-                 shopping_day: "20200720"
-                 product_name: "にんじん"
-                 quantity: "1袋"
-                 price: "190円"
-
-               - shopping_id: 1
-                 shopping_day: "20200720"
-                 product_name: "たまねぎ"
-                 
-          
-          
-        "400":
-          description: Bad Request
-          
-        "404":
-          description: Not Found
-          
-        "500":
-          description: Internal Server Error      
-          
-          
-          
-  /api/shopping/{shopping_id}/products/{shopping_product_id}/product_name:
+    
+    
     delete:
       tags:
         - shopping
@@ -389,15 +352,16 @@ paths:
           description: Not Found
           
         "500":
-          description: Internal Server Error        
-          
+          description: Internal Server Error
+    
   
   
-  /api/shopping/{shopping_id}/products/{shopping_product_id}/quantity:
-    delete:
+  
+  /api/shopping/{shopping_id}/products:        
+    post:
       tags:
         - shopping
-      description: 指定した買い物リストの個数を削除する
+      description: 指定した買い物リストの商品を追加する。個数や価格も追加できる。
       parameters:
         - name: shopping_id
           in: path
@@ -406,56 +370,59 @@ paths:
           schema:
            type: integer
         
-        - name: shopping_product_id
-          in: path
-          description: 買い物リストの商品のID
-          required: true
-          schema:
-           type: integer   
            
-     
-      responses:    
-        
-        "204":
-          description: No content
-          
-        "404":
-          description: Not Found
-          
-        "500":
-          description: Internal Server Error 
-  
-  
-  
-  /api/shopping/{shopping_id}/products/{shopping_product_id}/price:
-    delete:
-      tags:
-        - shopping
-      description: 指定した買い物リストの価格を削除する
-      parameters:
-        - name: shopping_id
-          in: path
-          description: 買い物リストのID
-          required: true
-          schema:
-           type: integer
-        
-        - name: shopping_product_id
-          in: path
-          description: 買い物リストの商品のID
-          required: true
-          schema:
-           type: integer   
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                product_name:
+                  type: string
+                
+                  
+              example:
+                 product_name: "たまねぎ"
+                 
+                    
+        required: true   
            
-     
-      responses:    
-        
-        "204":
-          description: No content
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+               properties:
+                product_name:
+                   type: string
+                quantity:
+                   type: integer
+                price:
+                   type: integer
+                shopping_id:
+                   type: integer
+                shopping_day:
+                   type: number
+                
+                
+                   
+              example:
+                shopping_id: 1
+                shopping_day: 20200720
+                products:
+                  - product_name: "にんじん"
+                    quantity: 1
+                    price: 190
+                  - product_name: "たまねぎ"
+                
+              
+          
+          
+        "400":
+          description: Bad Request
           
         "404":
           description: Not Found
           
         "500":
           description: Internal Server Error
-  

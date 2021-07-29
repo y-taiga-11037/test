@@ -174,7 +174,7 @@ paths:
     delete:
       tags:
         - shopping
-      description: 指定した買い物リストの価格を削除する
+      description: 指定した買い物リストを削除する
       parameters:
         - name: shopping_id
           in: path

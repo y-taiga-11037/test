@@ -5,10 +5,9 @@ import (
 	"net/http"
 )
 
-const DefaultPort = ":8080"
 
 
-// リクエストを処理する関数
+// リクエストの内容に従って処理をする関数
 func handler(w http.ResponseWriter, r *http.Request) {
     fmt.Fprintf(w, "test page from Go.")
 }

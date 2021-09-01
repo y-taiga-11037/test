@@ -10,23 +10,26 @@ import (
 	logging "github.com/sirupsen/logrus"
 )
 
-type TestModel interface {
+type Shopping interface {
 	GetShoppingLists() ([]db.Response, error)
+	InsertShopping(body []byte) (int64, error)
+	InsertProduct(body []byte, lastInsertID int64) error
+	GetInsertLists(lastInsertID int64) (db.Response, error)
 }
 
-type GetHandler struct {
-	testModel TestModel
+type ShoppingHandler struct {
+	testModel Shopping
 }
 
-func NewGetHandler(t TestModel) *GetHandler {
-	return &GetHandler{t}
+func NewShoppingHandler(s Shopping) *ShoppingHandler {
+	return &ShoppingHandler{s}
 }
 
-func (g *GetHandler) GetShoppingListsHandler(w http.ResponseWriter, r *http.Request) {
+func (s *ShoppingHandler) GetShoppingListsHandler(w http.ResponseWriter, r *http.Request) {
 
 	logging.Infof("API request. method: %v, path: %v", r.Method, r.URL.Path)
 
-	responseSlice, err := g.testModel.GetShoppingLists()
+	responseSlice, err := s.testModel.GetShoppingLists()
 	if err != nil {
 		logging.Error("Failed to retrieve ShoppingLists")
 		return
@@ -47,7 +50,7 @@ func (g *GetHandler) GetShoppingListsHandler(w http.ResponseWriter, r *http.Requ
 	logging.Info("GetShoppingLists process completed")
 }
 
-func PostShoppingListsHandler(w http.ResponseWriter, r *http.Request) {
+func (s *ShoppingHandler) PostShoppingListsHandler(w http.ResponseWriter, r *http.Request) {
 
 	if r.Method != "POST" {
 		w.WriteHeader(http.StatusBadRequest)
@@ -74,7 +77,7 @@ func PostShoppingListsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	logging.Info("Body data loaded")
 
-	lastInsertID, err := db.InsertShopping(body)
+	lastInsertID, err := s.testModel.InsertShopping(body)
 	if err != nil {
 		w.WriteHeader(http.StatusConflict)
 		logging.Error("Insert failed for Shopping table")
@@ -83,7 +86,7 @@ func PostShoppingListsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	logging.Info("Successfully inserted Shopping table")
 
-	err = db.InsertProduct(body, lastInsertID)
+	err = s.testModel.InsertProduct(body, lastInsertID)
 	if err != nil {
 		w.WriteHeader(http.StatusConflict)
 		logging.Error("Insert failed for Product table")
@@ -92,7 +95,7 @@ func PostShoppingListsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	logging.Info("Successfully inserted Product table")
 
-	responseSlice, err := db.GetInsertLists(lastInsertID)
+	responseSlice, err := s.testModel.GetInsertLists(lastInsertID)
 	if err != nil {
 		w.WriteHeader(http.StatusConflict)
 		logging.Error("Failed to retrieve ShoppingLists")

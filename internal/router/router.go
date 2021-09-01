@@ -14,8 +14,8 @@ var R = mux.NewRouter()
 func Routing() {
 	logging.Info("Router Startup")
 
-	h := api.NewGetHandler(&db.CategoryModelDB{})
+	h := api.NewShoppingHandler(&db.ConnectDB{})
 
-	R.HandleFunc("/api/shopping", api.GetShoppingListsHandler).Methods("GET")
-	R.HandleFunc("/api/shopping", api.PostShoppingListsHandler).Methods("POST")
+	R.HandleFunc("/api/shopping", h.GetShoppingListsHandler).Methods("GET")
+	R.HandleFunc("/api/shopping", h.PostShoppingListsHandler).Methods("POST")
 }

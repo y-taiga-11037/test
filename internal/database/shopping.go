@@ -20,9 +20,9 @@ type Response struct {
 	Products    []Product `json:"products"`
 }
 
-type CategoryModelDB struct{}
+type ConnectDB struct{}
 
-func (c *CategoryModelDB) GetShoppingLists() ([]Response, error) {
+func (c *ConnectDB) GetShoppingLists() ([]Response, error) {
 
 	responseSlice := make([]Response, 0)
 
@@ -87,7 +87,7 @@ func (c *CategoryModelDB) GetShoppingLists() ([]Response, error) {
 	return responseSlice, err
 }
 
-func InsertShopping(body []byte) (int64, error) {
+func (c *ConnectDB) InsertShopping(body []byte) (int64, error) {
 
 	var firstInsert Response
 	err := json.Unmarshal(body, &firstInsert)
@@ -123,7 +123,7 @@ func InsertShopping(body []byte) (int64, error) {
 	return lastInsertID, err
 }
 
-func GetInsertLists(lastInsertID int64) (Response, error) {
+func (c *ConnectDB) GetInsertLists(lastInsertID int64) (Response, error) {
 
 	var id int = 0
 	var day string

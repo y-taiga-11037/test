@@ -10,7 +10,7 @@ import (
 
 var DB = Connect()
 
-func InsertProduct(body []byte, lastInsertID int64) error {
+func (c *ConnectDB) InsertProduct(body []byte, lastInsertID int64) error {
 
 	var secondInsert Response
 	err := json.Unmarshal(body, &secondInsert)

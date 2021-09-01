@@ -28,7 +28,11 @@ type Database interface {
 }
 
 type ConnectDB struct {
+<<<<<<< 6c73dfdef3eaaee99b4de58b3153f0c94da19496
 	database Database
+=======
+	transaction Database
+>>>>>>> fixup! Corrections to the parts that received comments
 }
 
 func (c *ConnectDB) GetShoppingLists() ([]Response, error) {

@@ -16,7 +16,10 @@ steps:
     commands:
       - go get golang.org/x/lint/golint
       - apt-get update && apt-get install default-mysql-client -y
+<<<<<<< 4288e1cca3ab42f5f22d83a836232358e00463ea
       - while [ -n "$(mysqladmin -utestuser -ptestuser ping -h mysql 2>&1 > /dev/null)" ]; do sleep 1; done
+=======
+>>>>>>> ting with drone exec
       - mysql -hmysql -utestuser -ptestuser mdtd_bootcamp < table_create.sql
       - go fmt ./...
       - go vet ./...

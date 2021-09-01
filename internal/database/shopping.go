@@ -20,7 +20,9 @@ type Response struct {
 	Products    []Product `json:"products"`
 }
 
-func GetShoppingLists() ([]Response, error) {
+type CategoryModelDB struct{}
+
+func (c *CategoryModelDB) GetShoppingLists() ([]Response, error) {
 
 	responseSlice := make([]Response, 0)
 

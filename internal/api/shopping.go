@@ -10,11 +10,23 @@ import (
 	logging "github.com/sirupsen/logrus"
 )
 
-func GetShoppingListsHandler(w http.ResponseWriter, r *http.Request) {
+type TestModel interface {
+	GetShoppingLists() ([]db.Response, error)
+}
+
+type GetHandler struct {
+	testModel TestModel
+}
+
+func NewGetHandler(t TestModel) *GetHandler {
+	return &GetHandler{t}
+}
+
+func (g *GetHandler) GetShoppingListsHandler(w http.ResponseWriter, r *http.Request) {
 
 	logging.Infof("API request. method: %v, path: %v", r.Method, r.URL.Path)
 
-	responseSlice, err := db.GetShoppingLists()
+	responseSlice, err := g.testModel.GetShoppingLists()
 	if err != nil {
 		logging.Error("Failed to retrieve ShoppingLists")
 		return

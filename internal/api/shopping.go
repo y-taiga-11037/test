@@ -2,6 +2,7 @@ package api
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 
@@ -76,6 +77,7 @@ func (s *ShoppingHandler) PostShoppingListsHandler(w http.ResponseWriter, r *htt
 		return
 	}
 	logging.Info("Body data loaded")
+	fmt.Printf("%v", body)
 
 	lastInsertID, err := s.testModel.InsertShopping(body)
 	if err != nil {

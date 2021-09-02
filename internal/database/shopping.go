@@ -20,7 +20,16 @@ type Response struct {
 	Products    []Product `json:"products"`
 }
 
-type ConnectDB struct{}
+type Database interface {
+	GetShoppingLists() ([]Response, error)
+	InsertShopping(body []byte) (int64, error)
+	InsertProduct(body []byte, lastInsertID int64) error
+	GetInsertLists(lastInsertID int64) (Response, error)
+}
+
+type ConnectDB struct {
+	testModelDB Database
+}
 
 func (c *ConnectDB) GetShoppingLists() ([]Response, error) {
 

@@ -14,8 +14,6 @@ type testModelStub struct{}
 
 func (t *testModelStub) GetShoppingLists() ([]db.Response, error) {
 
-	//responseSlice := make([]Response, 0)
-
 	var responseSlice = []db.Response{
 		{
 			ShoppingId:  1,
@@ -60,7 +58,7 @@ func TestGetShoppingListsHandler(t *testing.T) {
 	router := mux.NewRouter()
 
 	type fields struct {
-		testModel Shopping
+		testModel db.Database
 	}
 
 	type args struct {
@@ -76,7 +74,7 @@ func TestGetShoppingListsHandler(t *testing.T) {
 	}{
 		// TODO: Add test cases.
 		{
-			name: "test1",
+			name: "nomal1",
 			fields: fields{
 				testModel: &testModelStub{},
 			},
@@ -105,7 +103,7 @@ func TestPostShoppingListsHandler(t *testing.T) {
 	router := mux.NewRouter()
 
 	type fields struct {
-		testModel Shopping
+		testModel db.Database
 	}
 
 	type args struct {
@@ -121,7 +119,7 @@ func TestPostShoppingListsHandler(t *testing.T) {
 	}{
 		// TODO: Add test cases.
 		{
-			name: "test1",
+			name: "nomal1",
 			fields: fields{
 				testModel: &testModelStub{},
 			},

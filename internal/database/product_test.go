@@ -1,6 +1,7 @@
 package database
 
 import (
+	"os"
 	"testing"
 
 	_ "gh.iiji.jp/y-taiga/mdtd_bootcamp/internal/logger"
@@ -8,6 +9,7 @@ import (
 )
 
 func TestConnectDB_InsertProduct(t *testing.T) {
+
 	type fields struct {
 		testModelDB Database
 	}
@@ -23,7 +25,7 @@ func TestConnectDB_InsertProduct(t *testing.T) {
 	}{
 		{
 			// TODO: Add test cases.
-			name: "test1",
+			name: "nomal1",
 			fields: fields{
 				testModelDB: &ConnectDB{},
 			},
@@ -42,4 +44,10 @@ func TestConnectDB_InsertProduct(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestMain(m *testing.M) {
+	DB = Connect()
+	code := m.Run()
+	os.Exit(code)
 }

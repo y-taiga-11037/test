@@ -2,7 +2,6 @@ package api
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 
@@ -11,18 +10,11 @@ import (
 	logging "github.com/sirupsen/logrus"
 )
 
-type Shopping interface {
-	GetShoppingLists() ([]db.Response, error)
-	InsertShopping(body []byte) (int64, error)
-	InsertProduct(body []byte, lastInsertID int64) error
-	GetInsertLists(lastInsertID int64) (db.Response, error)
-}
-
 type ShoppingHandler struct {
-	testModel Shopping
+	shopping db.Database
 }
 
-func NewShoppingHandler(s Shopping) *ShoppingHandler {
+func NewShoppingHandler(s db.Database) *ShoppingHandler {
 	return &ShoppingHandler{s}
 }
 
@@ -30,7 +22,7 @@ func (s *ShoppingHandler) GetShoppingListsHandler(w http.ResponseWriter, r *http
 
 	logging.Infof("API request. method: %v, path: %v", r.Method, r.URL.Path)
 
-	responseSlice, err := s.testModel.GetShoppingLists()
+	responseSlice, err := s.shopping.GetShoppingLists()
 	if err != nil {
 		logging.Error("Failed to retrieve ShoppingLists")
 		return
@@ -77,9 +69,8 @@ func (s *ShoppingHandler) PostShoppingListsHandler(w http.ResponseWriter, r *htt
 		return
 	}
 	logging.Info("Body data loaded")
-	fmt.Printf("%v", body)
 
-	lastInsertID, err := s.testModel.InsertShopping(body)
+	lastInsertID, err := s.shopping.InsertShopping(body)
 	if err != nil {
 		w.WriteHeader(http.StatusConflict)
 		logging.Error("Insert failed for Shopping table")
@@ -88,7 +79,7 @@ func (s *ShoppingHandler) PostShoppingListsHandler(w http.ResponseWriter, r *htt
 	}
 	logging.Info("Successfully inserted Shopping table")
 
-	err = s.testModel.InsertProduct(body, lastInsertID)
+	err = s.shopping.InsertProduct(body, lastInsertID)
 	if err != nil {
 		w.WriteHeader(http.StatusConflict)
 		logging.Error("Insert failed for Product table")
@@ -97,7 +88,7 @@ func (s *ShoppingHandler) PostShoppingListsHandler(w http.ResponseWriter, r *htt
 	}
 	logging.Info("Successfully inserted Product table")
 
-	responseSlice, err := s.testModel.GetInsertLists(lastInsertID)
+	responseSlice, err := s.shopping.GetInsertLists(lastInsertID)
 	if err != nil {
 		w.WriteHeader(http.StatusConflict)
 		logging.Error("Failed to retrieve ShoppingLists")

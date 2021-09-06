@@ -28,7 +28,7 @@ type Database interface {
 }
 
 type ConnectDB struct {
-	testModelDB Database
+	database Database
 }
 
 func (c *ConnectDB) GetShoppingLists() ([]Response, error) {

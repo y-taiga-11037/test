@@ -26,7 +26,7 @@ func TestConnectDB_GetShoppingLists(t *testing.T) {
 	}{
 		// TODO: Add test cases.
 		{
-			name: "test1",
+			name: "nomal1",
 			fields: fields{
 				testModelDB: &ConnectDB{},
 			},
@@ -81,7 +81,7 @@ func TestConnectDB_InsertShopping(t *testing.T) {
 	}{
 		{
 			// TODO: Add test cases.
-			name: "test1",
+			name: "nomal1",
 			fields: fields{
 				testModelDB: &ConnectDB{},
 			},
@@ -125,7 +125,7 @@ func TestConnectDB_GetInsertLists(t *testing.T) {
 	}{
 		// TODO: Add test cases.
 		{
-			name: "test1",
+			name: "nomal1",
 			fields: fields{
 				testModelDB: &ConnectDB{},
 			},

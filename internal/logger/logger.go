@@ -63,12 +63,20 @@ func init() {
 
 	logrus.SetFormatter(&formatter)
 
+	/* TODO:
+	drone test does not recognize file path
+	The log file and the environment setting file are read by the CLI
+	Fix it when the CLI is installed
+
+
 	// Configuring the log output file
-	f, err := openFile("/home/y-taiga/mdtd_bootcamp/tmp/api.log")
-	if err != nil {
-		logrus.Fatal(err)
-	}
-	logrus.SetOutput(io.MultiWriter(os.Stdout, f))
+	/*	f, err := openFile("/home/y-taiga/mdtd_bootcamp/tmp/api.log")
+		if err != nil {
+			logrus.Fatal(err)
+		}
+		logrus.SetOutput(io.MultiWriter(os.Stdout, f)) */
+
+	logrus.SetOutput(io.MultiWriter(os.Stdout))
 
 	// Outputs a level higher than the set level
 	logrus.SetLevel(logrus.DebugLevel)

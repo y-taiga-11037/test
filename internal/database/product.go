@@ -8,8 +8,6 @@ import (
 	logging "github.com/sirupsen/logrus"
 )
 
-var DB = Connect()
-
 func (c *ConnectDB) InsertProduct(body []byte, lastInsertID int64) error {
 
 	var secondInsert Response

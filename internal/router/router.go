@@ -17,12 +17,12 @@ func Routing() {
 	h := api.NewShoppingHandler(&db.ConnectDB{})
 
 	R.HandleFunc("/api/shopping", h.GetShoppingListsHandler).Methods("GET")
-	R.HandleFunc("/api/shopping", h.PostShoppingListsHandler).Methods("POST")
-	R.HandleFunc("/api/shopping/{shopping_id}", h.DateChangeHandler).Methods("PATCH")
+	R.HandleFunc("/api/shopping", h.CreateShoppingListsHandler).Methods("POST")
+	R.HandleFunc("/api/shopping/{shopping_id}", h.UpdateDateHandler).Methods("PATCH")
 	R.HandleFunc("/api/shopping/{shopping_id}", h.DeleteShoppingListsHandler).Methods("DELETE")
-	R.HandleFunc("/api/shopping/{shopping_id}", h.GetOneShoppingListHandler).Methods("GET")
-	R.HandleFunc("/api/shopping/{shopping_id}/products/{shopping_product_id}", h.ChangeShoppingListHandler).Methods("PATCH")
+	R.HandleFunc("/api/shopping/{shopping_id}", h.GetSingleShoppingListHandler).Methods("GET")
+	R.HandleFunc("/api/shopping/{shopping_id}/products/{shopping_product_id}", h.UpdateShoppingListHandler).Methods("PATCH")
 	R.HandleFunc("/api/shopping/{shopping_id}/products/{shopping_product_id}", h.DeleteItemFromShoppingListHandler).Methods("DELETE")
-	R.HandleFunc("/api/shopping/{shopping_id}/products", h.POSTItemFromShoppingListHandler).Methods("POST")
+	R.HandleFunc("/api/shopping/{shopping_id}/products", h.CreateItemFromShoppingListHandler).Methods("POST")
 
 }

@@ -25,16 +25,16 @@ type DateResponse struct {
 	ShoppingDay string `json:"shopping_day"`
 }
 
-type PurcheseFlag struct {
+type PurchaseFlag struct {
 	ProductName  string `json:"product_name"`
 	Quantity     int    `json:"quantity"`
 	Price        int    `json:"price"`
-	PurcheseFlag int    `json:"purchese_flag"`
+	PurchaseFlag int    `json:"purchase_flag"`
 }
 
 type FlagResponse struct {
 	ShoppingId int          `json:"shopping_id"`
-	Products   PurcheseFlag `json:"products"`
+	Products   PurchaseFlag `json:"products"`
 }
 
 type Database interface {
@@ -42,24 +42,16 @@ type Database interface {
 	InsertShopping(body []byte) (int64, error)
 	InsertProduct(body []byte, lastInsertID int64) error
 	GetInsertLists(lastInsertID int64) (Response, error)
-	DateChange(body []byte, shopping_id int) (DateResponse, error)
-	DeleteShoppingTable(shopping_id int) error
-	DeleteProductTable(shopping_id int) error
-	GetOneShoppingList(shopping_id int) (Response, error)
+	UpdateDate(body []byte, shopping_id int) (DateResponse, error)
+	DeleteShoppingByShoppingId(shopping_id int) error
+	DeleteProductByShoppingId(shopping_id int) error
+	GetSingleShoppingList(shopping_id int) (Response, error)
 	ChangeShoppingList(body []byte, shopping_id int, shopping_product_id int) (FlagResponse, error)
 	DeleteProduct(shopping_id int, shopping_product_id int) error
 }
 
 type ConnectDB struct {
-<<<<<<< b0859a2079a60af3bc73e01481f37b41356e2d06
-<<<<<<< 6c73dfdef3eaaee99b4de58b3153f0c94da19496
 	database Database
-=======
-	transaction Database
->>>>>>> fixup! Corrections to the parts that received comments
-=======
-	database Database
->>>>>>> make api
 }
 
 func (c *ConnectDB) GetShoppingLists() ([]Response, error) {
@@ -210,7 +202,7 @@ func (c *ConnectDB) GetInsertLists(lastInsertID int64) (Response, error) {
 	return container, err
 }
 
-func (c *ConnectDB) DateChange(body []byte, shopping_id int) (DateResponse, error) {
+func (c *ConnectDB) UpdateDate(body []byte, shopping_id int) (DateResponse, error) {
 
 	var update DateResponse
 	err := json.Unmarshal(body, &update)
@@ -232,7 +224,7 @@ func (c *ConnectDB) DateChange(body []byte, shopping_id int) (DateResponse, erro
 	return update, err
 }
 
-func (c *ConnectDB) DeleteShoppingTable(shopping_id int) error {
+func (c *ConnectDB) DeleteShoppingByShoppingId(shopping_id int) error {
 
 	_, err := DB.Exec("DELETE FROM shopping WHERE shopping_id = ?", shopping_id)
 	if err != nil {
@@ -245,7 +237,7 @@ func (c *ConnectDB) DeleteShoppingTable(shopping_id int) error {
 
 }
 
-func (c *ConnectDB) GetOneShoppingList(shopping_id int) (Response, error) {
+func (c *ConnectDB) GetSingleShoppingList(shopping_id int) (Response, error) {
 
 	var id int = 0
 	var day string

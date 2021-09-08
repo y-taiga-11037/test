@@ -2,7 +2,6 @@ package database
 
 import (
 	"encoding/json"
-	"fmt"
 
 	_ "gh.iiji.jp/y-taiga/mdtd_bootcamp/internal/logger"
 	_ "github.com/go-sql-driver/mysql"
@@ -18,9 +17,6 @@ func (c *ConnectDB) InsertProduct(body []byte, lastInsertID int64) error {
 		return err
 	}
 	logging.Info("Encoding completed")
-
-	fmt.Println(body)
-	fmt.Println(secondInsert)
 
 	insertStatementForProduct := "INSERT INTO product (shopping_id, product_name, price, quantity) VALUES (?, ?, ?, ?);"
 	stmtForProduct, err := DB.Prepare(insertStatementForProduct)
@@ -44,7 +40,7 @@ func (c *ConnectDB) InsertProduct(body []byte, lastInsertID int64) error {
 	return err
 }
 
-func (c *ConnectDB) DeleteProductTable(shopping_id int) error {
+func (c *ConnectDB) DeleteProductByShoppingId(shopping_id int) error {
 
 	_, err := DB.Exec("DELETE FROM product WHERE shopping_id = ?", shopping_id)
 	if err != nil {
@@ -59,7 +55,7 @@ func (c *ConnectDB) DeleteProductTable(shopping_id int) error {
 func (c *ConnectDB) ChangeShoppingList(body []byte, shopping_id int, shopping_product_id int) (FlagResponse, error) {
 
 	var update FlagResponse
-	var patchcontents PurcheseFlag
+	var patchcontents PurchaseFlag
 	err := json.Unmarshal(body, &patchcontents)
 	if err != nil {
 		logging.Error("Encoding failed")
@@ -67,7 +63,7 @@ func (c *ConnectDB) ChangeShoppingList(body []byte, shopping_id int, shopping_pr
 	}
 	logging.Info("Encoding completed")
 
-	_, err = DB.Exec("UPDATE product set product_name = ?, price = ?, quantity = ?, purchase_flag = ? WHERE shopping_id = ? AND shopping_product_id = ?", &patchcontents.ProductName, &patchcontents.Price, &patchcontents.Quantity, &patchcontents.PurcheseFlag, shopping_id, shopping_product_id)
+	_, err = DB.Exec("UPDATE product set product_name = ?, price = ?, quantity = ?, purchase_flag = ? WHERE shopping_id = ? AND shopping_product_id = ?", &patchcontents.ProductName, &patchcontents.Price, &patchcontents.Quantity, &patchcontents.PurchaseFlag, shopping_id, shopping_product_id)
 	if err != nil {
 		logging.Error("Couldn't update")
 		return update, err

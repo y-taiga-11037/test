@@ -13,28 +13,8 @@ import (
 	logging "github.com/sirupsen/logrus"
 )
 
-<<<<<<< c5c52fe5feaf62093f0cb5207c30a2d3b4a347e3
-<<<<<<< b0859a2079a60af3bc73e01481f37b41356e2d06
-=======
-type Shopping interface {
-	GetShoppingLists() ([]db.Response, error)
-	InsertShopping(body []byte) (int64, error)
-	InsertProduct(body []byte, lastInsertID int64) error
-	GetInsertLists(lastInsertID int64) (db.Response, error)
-	DateChange(body []byte, shopping_id int64) (db.Response, error)
-}
-
->>>>>>> make api
 type ShoppingHandler struct {
 	shopping db.Database
-=======
-type ShoppingHandler struct {
-<<<<<<< 9b627102d8785010d661b988e468134139ff84e5
-	testModel db.Database
->>>>>>> make api
-=======
-	shopping db.Database
->>>>>>> fixup! Name correction
 }
 
 func NewShoppingHandler(s db.Database) *ShoppingHandler {
@@ -66,7 +46,7 @@ func (s *ShoppingHandler) GetShoppingListsHandler(w http.ResponseWriter, r *http
 	logging.Info("GetShoppingLists process completed")
 }
 
-func (s *ShoppingHandler) PostShoppingListsHandler(w http.ResponseWriter, r *http.Request) {
+func (s *ShoppingHandler) CreateShoppingListsHandler(w http.ResponseWriter, r *http.Request) {
 
 	if r.Method != "POST" {
 		w.WriteHeader(http.StatusBadRequest)
@@ -136,7 +116,7 @@ func (s *ShoppingHandler) PostShoppingListsHandler(w http.ResponseWriter, r *htt
 	logging.Info("PostShoppingLists process completed")
 }
 
-func (s *ShoppingHandler) DateChangeHandler(w http.ResponseWriter, r *http.Request) {
+func (s *ShoppingHandler) UpdateDateHandler(w http.ResponseWriter, r *http.Request) {
 
 	if r.Method != "PATCH" {
 		w.WriteHeader(http.StatusBadRequest)
@@ -173,7 +153,7 @@ func (s *ShoppingHandler) DateChangeHandler(w http.ResponseWriter, r *http.Reque
 	}
 	logging.Info("Body data loaded")
 
-	response, err = s.shopping.DateChange(body, ID)
+	response, err = s.shopping.UpdateDate(body, ID)
 	if err != nil {
 		w.WriteHeader(http.StatusConflict)
 		logging.Error("Processing failed")
@@ -218,13 +198,13 @@ func (s *ShoppingHandler) DeleteShoppingListsHandler(w http.ResponseWriter, r *h
 		return
 	}
 
-	err = s.shopping.DeleteProductTable(ID)
+	err = s.shopping.DeleteProductByShoppingId(ID)
 	if err != nil {
 		logging.Error("Failed to delete ShoppingLists")
 		return
 	}
 
-	err = s.shopping.DeleteShoppingTable(ID)
+	err = s.shopping.DeleteShoppingByShoppingId(ID)
 	if err != nil {
 		logging.Error("Failed to delete ShoppingLists")
 		return
@@ -232,7 +212,7 @@ func (s *ShoppingHandler) DeleteShoppingListsHandler(w http.ResponseWriter, r *h
 	logging.Info("ShoppingLists has been deleted successfully")
 }
 
-func (s *ShoppingHandler) GetOneShoppingListHandler(w http.ResponseWriter, r *http.Request) {
+func (s *ShoppingHandler) GetSingleShoppingListHandler(w http.ResponseWriter, r *http.Request) {
 
 	logging.Infof("API request. method: %v, path: %v", r.Method, r.URL.Path)
 
@@ -245,7 +225,7 @@ func (s *ShoppingHandler) GetOneShoppingListHandler(w http.ResponseWriter, r *ht
 		return
 	}
 
-	response, err := s.shopping.GetOneShoppingList(ID)
+	response, err := s.shopping.GetSingleShoppingList(ID)
 	if err != nil {
 		logging.Error("Failed to retrieve ShoppingLists")
 		return
@@ -267,7 +247,7 @@ func (s *ShoppingHandler) GetOneShoppingListHandler(w http.ResponseWriter, r *ht
 
 }
 
-func (s *ShoppingHandler) ChangeShoppingListHandler(w http.ResponseWriter, r *http.Request) {
+func (s *ShoppingHandler) UpdateShoppingListHandler(w http.ResponseWriter, r *http.Request) {
 
 	if r.Method != "PATCH" {
 		w.WriteHeader(http.StatusBadRequest)
@@ -377,7 +357,7 @@ func (s *ShoppingHandler) DeleteItemFromShoppingListHandler(w http.ResponseWrite
 
 }
 
-func (s *ShoppingHandler) POSTItemFromShoppingListHandler(w http.ResponseWriter, r *http.Request) {
+func (s *ShoppingHandler) CreateItemFromShoppingListHandler(w http.ResponseWriter, r *http.Request) {
 
 	if r.Method != "POST" {
 		w.WriteHeader(http.StatusBadRequest)

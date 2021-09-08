@@ -10,11 +10,19 @@ import (
 	logging "github.com/sirupsen/logrus"
 )
 
-func GetShoppingListsHandler(w http.ResponseWriter, r *http.Request) {
+type ShoppingHandler struct {
+	shopping db.Database
+}
+
+func NewShoppingHandler(s db.Database) *ShoppingHandler {
+	return &ShoppingHandler{s}
+}
+
+func (s *ShoppingHandler) GetShoppingListsHandler(w http.ResponseWriter, r *http.Request) {
 
 	logging.Infof("API request. method: %v, path: %v", r.Method, r.URL.Path)
 
-	responseSlice, err := db.GetShoppingLists()
+	responseSlice, err := s.shopping.GetShoppingLists()
 	if err != nil {
 		logging.Error("Failed to retrieve ShoppingLists")
 		return
@@ -35,7 +43,7 @@ func GetShoppingListsHandler(w http.ResponseWriter, r *http.Request) {
 	logging.Info("GetShoppingLists process completed")
 }
 
-func PostShoppingListsHandler(w http.ResponseWriter, r *http.Request) {
+func (s *ShoppingHandler) PostShoppingListsHandler(w http.ResponseWriter, r *http.Request) {
 
 	if r.Method != "POST" {
 		w.WriteHeader(http.StatusBadRequest)
@@ -62,7 +70,7 @@ func PostShoppingListsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	logging.Info("Body data loaded")
 
-	lastInsertID, err := db.InsertShopping(body)
+	lastInsertID, err := s.shopping.InsertShopping(body)
 	if err != nil {
 		w.WriteHeader(http.StatusConflict)
 		logging.Error("Insert failed for Shopping table")
@@ -71,7 +79,7 @@ func PostShoppingListsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	logging.Info("Successfully inserted Shopping table")
 
-	err = db.InsertProduct(body, lastInsertID)
+	err = s.shopping.InsertProduct(body, lastInsertID)
 	if err != nil {
 		w.WriteHeader(http.StatusConflict)
 		logging.Error("Insert failed for Product table")
@@ -80,7 +88,7 @@ func PostShoppingListsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	logging.Info("Successfully inserted Product table")
 
-	responseSlice, err := db.GetInsertLists(lastInsertID)
+	responseSlice, err := s.shopping.GetInsertLists(lastInsertID)
 	if err != nil {
 		w.WriteHeader(http.StatusConflict)
 		logging.Error("Failed to retrieve ShoppingLists")

@@ -27,4 +27,3 @@ CREATE TABLE product (
 INSERT INTO shopping (shopping_id, shopping_day) VALUES (1, "2021-09-01");
 
 INSERT INTO product (shopping_product_id, shopping_id, product_name, price, quantity) VALUES (1, 1, 'にんじん', 190, 1);
-

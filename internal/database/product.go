@@ -39,3 +39,51 @@ func (c *ConnectDB) InsertProduct(body []byte, lastInsertID int64) error {
 	logging.Info("Successfully inserted")
 	return err
 }
+
+func (c *ConnectDB) DeleteProductByShoppingId(shopping_id int) error {
+
+	_, err := DB.Exec("DELETE FROM product WHERE shopping_id = ?", shopping_id)
+	if err != nil {
+		logging.Error("ProductTable Deletion failure")
+		return err
+	}
+	logging.Info("ProductTable Deletion Success")
+
+	return err
+}
+
+func (c *ConnectDB) ChangeShoppingList(body []byte, shopping_id int, shopping_product_id int) (FlagResponse, error) {
+
+	var update FlagResponse
+	var patchcontents PurchaseFlag
+	err := json.Unmarshal(body, &patchcontents)
+	if err != nil {
+		logging.Error("Encoding failed")
+		return update, err
+	}
+	logging.Info("Encoding completed")
+
+	_, err = DB.Exec("UPDATE product set product_name = ?, price = ?, quantity = ?, purchase_flag = ? WHERE shopping_id = ? AND shopping_product_id = ?", &patchcontents.ProductName, &patchcontents.Price, &patchcontents.Quantity, &patchcontents.PurchaseFlag, shopping_id, shopping_product_id)
+	if err != nil {
+		logging.Error("Couldn't update")
+		return update, err
+	}
+	logging.Info("Update Complete")
+
+	update = FlagResponse{ShoppingId: shopping_id, Products: patchcontents}
+
+	return update, err
+
+}
+
+func (c *ConnectDB) DeleteProduct(shopping_id int, shopping_product_id int) error {
+
+	_, err := DB.Exec("DELETE FROM product WHERE shopping_id = ? AND shopping_product_id = ?", shopping_id, shopping_product_id)
+	if err != nil {
+		logging.Error("Product Deletion failure")
+		return err
+	}
+	logging.Info("Product Deletion Success")
+
+	return err
+}

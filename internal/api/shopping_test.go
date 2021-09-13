@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	db "gh.iiji.jp/y-taiga/mdtd_bootcamp/internal/database"
-	_ "gh.iiji.jp/y-taiga/mdtd_bootcamp/internal/logger"
 	"github.com/gorilla/mux"
 )
 

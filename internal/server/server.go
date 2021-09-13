@@ -4,7 +4,6 @@ import (
 	"log"
 	"net/http"
 
-	_ "gh.iiji.jp/y-taiga/mdtd_bootcamp/internal/logger"
 	"gh.iiji.jp/y-taiga/mdtd_bootcamp/internal/router"
 	logging "github.com/sirupsen/logrus"
 )

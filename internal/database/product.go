@@ -3,7 +3,6 @@ package database
 import (
 	"encoding/json"
 
-	_ "gh.iiji.jp/y-taiga/mdtd_bootcamp/internal/logger"
 	_ "github.com/go-sql-driver/mysql"
 	logging "github.com/sirupsen/logrus"
 )

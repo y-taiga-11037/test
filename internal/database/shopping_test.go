@@ -4,7 +4,6 @@ import (
 	"reflect"
 	"testing"
 
-	_ "gh.iiji.jp/y-taiga/mdtd_bootcamp/internal/logger"
 	_ "github.com/go-sql-driver/mysql"
 )
 

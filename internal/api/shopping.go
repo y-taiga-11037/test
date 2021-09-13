@@ -9,7 +9,6 @@ import (
 	"github.com/gorilla/mux"
 
 	db "gh.iiji.jp/y-taiga/mdtd_bootcamp/internal/database"
-	_ "gh.iiji.jp/y-taiga/mdtd_bootcamp/internal/logger"
 	logging "github.com/sirupsen/logrus"
 )
 

@@ -56,29 +56,36 @@ func (f *logFormat) Format(entry *logrus.Entry) ([]byte, error) {
 }
 
 // Runs when the package is loaded
-func init() {
+func LogSetting() {
 	logrus.SetReportCaller(true) // To handle executable files
 	formatter := logFormat{}
 	formatter.TimestampFormat = "2006-01-02 15:04:05" // Time Setting
 
 	logrus.SetFormatter(&formatter)
 
-	/* TODO:
-	drone test does not recognize file path
-	The log file and the environment setting file are read by the CLI
-	Fix it when the CLI is installed
-
-
-	// Configuring the log output file
-	/*	f, err := openFile("/home/y-taiga/mdtd_bootcamp/tmp/api.log")
-		if err != nil {
-			logrus.Fatal(err)
-		}
-		logrus.SetOutput(io.MultiWriter(os.Stdout, f)) */
-
-	logrus.SetOutput(io.MultiWriter(os.Stdout))
+	path := os.Getenv("LOG_FILE")
 
 	// Outputs a level higher than the set level
 	logrus.SetLevel(logrus.DebugLevel)
+
+	// Configuring the log output file
+
+	if path == "" {
+		logrus.Info("Since no log file is specified, standard output will be used")
+		logrus.SetOutput(io.MultiWriter(os.Stdout))
+
+	} else {
+
+		f, err := openFile(path)
+		if err != nil {
+			logrus.Errorf("File reference error: %v", err)
+			os.Exit(1)
+		}
+
+		logrus.SetOutput(io.MultiWriter(os.Stdout, f))
+
+	}
+
+	logrus.Info("Log file configuration completed")
 
 }
